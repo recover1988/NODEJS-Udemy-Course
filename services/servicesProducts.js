@@ -41,9 +41,21 @@ const deleteProduct = (req, res) => {
   });
 };
 
+const getOneProduct = (req, res) => {
+  console.log(req.params.id);
+  const { id } = req.params;
+  res.json({
+    id,
+    name: "teclado",
+    price: 2000,
+    category: "tecnology",
+  });
+};
+
 module.exports = {
   getAllProducts,
   createNewProduct,
   updateProduct,
-  deleteProduct
+  deleteProduct,
+  getOneProduct,
 };

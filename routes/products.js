@@ -23,14 +23,7 @@ router.delete("/:id", (req, res) => {
 
 // params -> /:id
 router.get("/:id", (req, res) => {
-  console.log(req.params.id);
-  const { id } = req.params;
-  res.json({
-    id,
-    name: "teclado",
-    price: 2000,
-    category: "tecnology",
-  });
+  productServices.getOneProduct(req, res);
 });
 
 module.exports = router;
