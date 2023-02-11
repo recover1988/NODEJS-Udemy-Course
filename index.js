@@ -1,4 +1,5 @@
 const express = require("express");
+const { errorLogs, handlerError } = require("./middleware/error.handler");
 
 const apiRouter = require("./server");
 
@@ -6,7 +7,7 @@ const app = express();
 
 const port = 3000;
 
-app.use(express.json()) // middleware para convertir a JSON
+app.use(express.json()); // middleware para convertir a JSON
 
 // req -> la request o peticion
 // res -> responds o respuesta
@@ -17,6 +18,10 @@ app.get("/", (req, res) => {
 });
 
 apiRouter(app);
+
+//middleware
+app.use(handlerError);
+app.use(errorLogs);
 
 app.listen(port, (req, res) => {
   console.log("Escuchando en el puert: ", port);
