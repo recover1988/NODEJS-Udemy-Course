@@ -1,5 +1,5 @@
 const express = require("express");
-
+const faker = require("faker");
 const app = express();
 
 const port = 3000;
@@ -12,12 +12,23 @@ app.get("/", (req, res) => {
   res.send("Hola mundo desde ruta raiz");
 });
 
-app.get("/api/v1/help", (req, res) => {
-  res.status(200).send("Hola desde help");
+app.get("/products", (req, res) => {
+  const products = [];
+  const { size } = req.query;
+  const limit = size || 5;
+  for (let index = 0; index < limit; index++) {
+    products.push({
+      name: faker.commerce.productName(),
+      price: parseInt(faker.commerce.price(), 10),
+      image: faker.image.imageUrl(),
+    });
+  }
+
+  res.json(products);
 });
 
 // params -> /:id
-app.get("/products/:id", (req, res) => {
+app.get("/products/:id/products", (req, res) => {
   console.log(req.params.id);
   const { id } = req.params;
   res.json({
