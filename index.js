@@ -6,6 +6,8 @@ const app = express();
 
 const port = 3000;
 
+app.use(express.json()) // middleware para convertir a JSON
+
 // req -> la request o peticion
 // res -> responds o respuesta
 // hay q usar api y version para que el usuario no se quede sin info si estamos acutaliznaod o modificando la api
