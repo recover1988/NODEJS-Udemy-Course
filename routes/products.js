@@ -4,9 +4,13 @@ const productServices = require("../services/servicesProducts");
 
 const router = express.Router();
 
-router.get("/", async (req, res) => {
-  const product = await productServices.getAllProducts(req, res);
-  res.json(product);
+router.get("/", async (req, res, next) => {
+  try {
+    const product = await productServices.getAllProducts(req, res);
+    res.json(product);
+  } catch (error) {
+    next(error);
+  }
 });
 
 router.post("/", async (req, res) => {
