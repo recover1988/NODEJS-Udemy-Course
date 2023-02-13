@@ -1,12 +1,13 @@
 const express = require("express");
-const { errorLogs, handlerError } = require("./middleware/error.handler");
-
+const cors = require("cors");
 const apiRouter = require("./server");
 
 const app = express();
 
-const port = 3000;
+const { errorLogs, handlerError } = require("./middleware/error.handler");
+const port = process.env.PORT || 3000;
 
+app.use(cors);
 app.use(express.json()); // middleware para convertir a JSON
 
 // req -> la request o peticion
