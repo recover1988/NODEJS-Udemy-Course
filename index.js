@@ -14,7 +14,7 @@ app.use(express.json()); // middleware para convertir a JSON
 // hay q usar api y version para que el usuario no se quede sin info si estamos acutaliznaod o modificando la api
 
 app.get("/", (req, res) => {
-  res.send("Hola mundo desde ruta raiz");
+  res.send("Hola mundo");
 });
 
 apiRouter(app);
@@ -24,5 +24,5 @@ app.use(handlerError);
 app.use(errorLogs);
 
 app.listen(port, (req, res) => {
-  console.log("Escuchando en el puert: ", port);
+  console.log("Escuchando en el puerto: ", port);
 });
