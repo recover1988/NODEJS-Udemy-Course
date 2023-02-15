@@ -1,9 +1,22 @@
+const { boom } = require("@hapi/boom");
 const getConnection = require("../libs/postgres");
 const { models } = require("../libs/sequelize");
 
-const getAllUser = async (req, res) => {
+const getAllUser = async () => {
   const response = await models.User.findAll();
   return response;
+};
+
+const findOne = async (id) => {
+  try {
+    const user = await models.User.findByPk(id);
+    if (!user) {
+      throw boom.notFound("User not found");
+    }
+    return user;
+  } catch (error) {
+    console.log(error);
+  }
 };
 
 const createUser = async (body) => {
@@ -51,4 +64,5 @@ module.exports = {
   createUser,
   updateUser,
   deleteUser,
+  findOne,
 };
