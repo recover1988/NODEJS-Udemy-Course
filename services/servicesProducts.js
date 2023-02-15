@@ -1,13 +1,11 @@
 const sequelize = require("../libs/sequelize");
-const faker = require("faker");
+const { models } = require("../libs/sequelize");
 
-const boom = require("@hapi/boom");
-const pool = require("../libs/postgres");
-
-const getAllProducts = async (req, res) => {
+const getAllProducts = async () => {
   try {
-    const query = "SELECT * FROM tasks";
-    const [data] = await sequelize.query(query);
+    const data = await models.Product.findAll({
+      include: ["category"],
+    });
     return {
       data,
     };
@@ -16,56 +14,53 @@ const getAllProducts = async (req, res) => {
   }
 };
 
-const createNewProduct = (req, res) => {
+const createnewProduct = async (body) => {
   try {
-    const body = req.body;
-    res.json({
-      ok: true,
-      data: body,
-    });
+    console.log(body);
+    const newCategory = await models.Product.create(body);
+    return newCategory;
   } catch (error) {
     console.log(error);
   }
 };
 
-const updateProduct = (req, res) => {
+const updateProduct = async (id, body) => {
   try {
-    const { id } = req.params;
-    // if (id != 1) {
-    //   throw boom.notFound('Product not found');
-    // }
-    const body = req.body;
-    res.json({
-      message: "success",
-      id,
-      product: body,
-    });
+    const category = await models.Product.findByPk(id);
+    if (!category) {
+      return {
+        error: "category not found",
+      };
+    }
+    const response = await category.update(body);
+    return response;
   } catch (error) {
     console.log(error);
   }
 };
 
-const deleteProduct = (req, res) => {
+const deleteProduct = async (id) => {
   try {
-    const { id } = req.params;
-    res.json({
-      message: "delete",
+    const category = await models.Product.findOne(id);
+    await category.destroy();
+    return {
+      message: "category delete",
       id,
-    });
+    };
   } catch (error) {
     console.log(error);
   }
 };
 
-const getOneProduct = (req, res) => {
+const getOneProduct = async (id) => {
   try {
-    const { id } = req.params;
-    res.json({
-      id,
-      name: "teclado",
-      price: 2000,
-      category: "tecnology",
-    });
+    const product = await models.Product.findOne(id);
+    if (!product) {
+      return {
+        message: "product not found",
+      };
+    }
+    return product;
   } catch (error) {
     console.log(error);
   }
@@ -73,7 +68,7 @@ const getOneProduct = (req, res) => {
 
 module.exports = {
   getAllProducts,
-  createNewProduct,
+  createnewProduct,
   updateProduct,
   deleteProduct,
   getOneProduct,
