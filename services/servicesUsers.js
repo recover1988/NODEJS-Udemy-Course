@@ -6,6 +6,49 @@ const getAllUser = async (req, res) => {
   return response;
 };
 
+const createUser = async (body) => {
+  try {
+    const newUser = await models.User.create(body);
+    return {
+      user: newUser,
+      message: "User Created",
+    };
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+const updateUser = async ({ id, body }) => {
+  try {
+    const user = await models.User.findByPk(id);
+    if (!user) {
+      return {
+        error: "User not found",
+      };
+    }
+    const response = await user.update(body);
+    return response;
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+const deleteUser = async (id) => {
+  try {
+    const user = await models.User.findOne({ id });
+    await user.destroy();
+    return {
+      message: "user deleted",
+      id,
+    };
+  } catch (error) {
+    console.log(error);
+  }
+};
+
 module.exports = {
   getAllUser,
+  createUser,
+  updateUser,
+  deleteUser,
 };
