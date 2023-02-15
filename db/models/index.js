@@ -5,7 +5,8 @@ function setupModels(sequelize) {
   User.init(UserSchema, User.config(sequelize));
   Client.init(ClientSchema, Client.config(sequelize));
 
-  Client.associate(sequelize.models)
+  Client.associate(sequelize.models);
+  User.associate(sequelize.models);
 }
 
 module.exports = setupModels;
