@@ -16,6 +16,16 @@ router.get("/", async (req, res, next) => {
   }
 });
 
+router.get("/:id", async (req, res, next) => {
+  try {
+    const { id } = req.params;
+    const getUser = await servicesUsers.findOne(id);
+    return res.json(getUser);
+  } catch (error) {
+    next(error);
+  }
+});
+
 router.post("/", async (req, res, next) => {
   try {
     const body = req.body;
