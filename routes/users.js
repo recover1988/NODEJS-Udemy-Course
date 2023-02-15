@@ -1,7 +1,12 @@
 const express = require("express");
 const servicesUsers = require("../services/servicesUsers");
-
 const router = express.Router();
+const {
+  createUserSchema,
+  updateUserSchema,
+  getUserSchema,
+} = require("../schema/schemaUsers");
+const validatorHandler = require("../middleware/validator.handler");
 
 // limit -> registro numerico positivo, numero maximo de registros que queremos retornar
 // offset -> el numero del primer registro a retornar empieza en 0
@@ -16,36 +21,48 @@ router.get("/", async (req, res, next) => {
   }
 });
 
-router.get("/:id", async (req, res, next) => {
-  try {
-    const { id } = req.params;
-    const getUser = await servicesUsers.findOne(id);
-    return res.json(getUser);
-  } catch (error) {
-    next(error);
+router.get(
+  "/:id",
+  validatorHandler(getUserSchema, "params"),
+  async (req, res, next) => {
+    try {
+      const { id } = req.params;
+      const getUser = await servicesUsers.findOne(id);
+      return res.json(getUser);
+    } catch (error) {
+      next(error);
+    }
   }
-});
+);
 
-router.post("/", async (req, res, next) => {
-  try {
-    const body = req.body;
-    const newUser = await servicesUsers.createUser(body);
-    return newUser;
-  } catch (error) {
-    next(error);
+router.post(
+  "/",
+  validatorHandler(createUserSchema, "body"),
+  async (req, res, next) => {
+    try {
+      const body = req.body;
+      const newUser = await servicesUsers.createUser(body);
+      return newUser;
+    } catch (error) {
+      next(error);
+    }
   }
-});
+);
 
-router.patch("/:id", async (req, res, next) => {
-  try {
-    const { id } = req.params;
-    const body = req.body;
-    const updateUser = await servicesUsers.updateUser({ id, body });
-    return res.json({ updateUser });
-  } catch (error) {
-    next(error);
+router.patch(
+  "/:id",
+  validatorHandler(updateUserSchema, "params"),
+  async (req, res, next) => {
+    try {
+      const { id } = req.params;
+      const body = req.body;
+      const updateUser = await servicesUsers.updateUser({ id, body });
+      return res.json({ updateUser });
+    } catch (error) {
+      next(error);
+    }
   }
-});
+);
 
 router.delete("/", async (req, res, next) => {
   try {
